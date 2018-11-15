@@ -17,7 +17,7 @@ help() {
   cat <<"EOF"
 OPTIONS:
   <action>                 'import' or 'export'
-                             o import - import ConfigMmap from a file or files
+                             o import - import ConfigMap from a file or files
                              o export - export ConfigMap to a file or files
   -c, --configmap <name>   ConfigMap name
   -n, --namespace <name>   Namespace ('default' by default)
@@ -25,7 +25,7 @@ OPTIONS:
   -t, --to <dir>           Direcotry to export
   -h, --help               Show this message
   -v, --version            Show this command's version
-USAGE:
+HOW TO USE:
   # Import <file> to ConfigMap named <name>
   kubecmf import -c <name> -f <file>
   # Import multiple files <file1> <file2> .. to ConfigMap named <name>
