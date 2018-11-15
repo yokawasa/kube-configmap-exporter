@@ -36,6 +36,11 @@ $ kubecmf import -c <name> -f <file> -r
 $ kubecmf export -c <name> -t <dir>
 ```
 
+## Prerequisite
+
+- [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) - `kubecmf` uses `kubectl` to access Kubernetes API to import or to export ConfigMap
+- [jq](https://stedolan.github.io/jq/) - `kubecmf` uses `jq` in exporting ConfigMap
+
 ## Installation
 
 ```sh
