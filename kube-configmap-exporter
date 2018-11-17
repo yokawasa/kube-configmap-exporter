@@ -116,6 +116,19 @@ cmd_main(){
     help >&2
     exit 1
   fi
+  if [[ "$(type kubectl &>/dev/null; echo $?)" -eq 1 ]]; then
+    echo "Error: missing kubectl command" >&2
+    echo "Please install kubectl (https://kubernetes.io/docs/tasks/tools/install-kubectl/)" >&2
+    exit 1
+  fi
+  if [[ "$(type jq &>/dev/null; echo $?)" -eq 1 ]]; then
+    echo "Error: missing jq command" >&2
+    echo "Please install jq (https://stedolan.github.io/jq/)" >&2
+    exit 1
+  fi
+  if [ ! -d ${export_dir} ]; then
+    mkdir -p ${export_dir}
+  fi
   export_configmap ${configmap_name} ${namespace} ${export_dir}
 }
 

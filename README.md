@@ -21,8 +21,8 @@ Example:
 
 ## Prerequisite
 
-- [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) - `kubecmf` uses `kubectl` to access Kubernetes API to import or to export ConfigMap
-- [jq](https://stedolan.github.io/jq/) - `kubecmf` uses `jq` in exporting ConfigMap
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) - `kube-configmap-exporter` uses `kubectl` to access Kubernetes API to import or to export ConfigMap
+- [jq](https://stedolan.github.io/jq/) - `kube-configmap-exporter` uses `jq` in exporting ConfigMap
 
 ## Installation
 
