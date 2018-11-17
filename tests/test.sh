@@ -11,7 +11,7 @@ echo "Export configmap \"mycm\" into files in directry \"exports\""
 if [ ! -d "${cwd}/exports" ]; then
   mkdir -p ${cwd}/exports
 fi
-${cwd}/../kube-configmap-exporter mycm -t exports
+${cwd}/../kube-configmap-exporter mycm -t ${cwd}/exports
 
 echo "Check exported files"
 for i in $(ls -1 ${cwd}/files/*)
@@ -30,7 +30,8 @@ do
   fi
 done
 
-echo "Remove configmap \"mycm\""
+echo "Remove configmap \"mycm\" and exported files"
 kubectl delete configmap mycm
+rm -rf ${cwd}/exports
 
 echo "Success!"
