@@ -53,8 +53,10 @@ export_configmap(){
           gsub(/"/,"", $1);
           # replace ("\"") to double quote
           gsub("\\\\\"", "\"" ,$2);
-          # replace ("\n") to LF
-          gsub("\\\\n", "\n" ,$2);
+          # replace ("\r\n") to LF
+          gsub("\\\\r\\\\n|\\\\n", "\n" ,$2);
+          # replace ("\t") to TAB
+          gsub("\\\\t", "\t" ,$2);
           # rtrim: tab, space, return, single quote and comma
           sub(/[ \t\r\n\",]+$/, "", $2)
           of=basedir "/" $1;
