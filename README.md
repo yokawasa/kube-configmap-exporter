@@ -1,42 +1,37 @@
-# kubecmf
-Kubernetes ConfigMap files exporter and importer
+# kube-configmap-exporter
+Kubernetes ConfigMap Exporter
 
 ## Usage
 
 ```txt
-Usage: kubecmf <action> -c <configmap> -n <namespace> [-f <file|dir>] [-t <dir>] options
-OPTIONS:
-  <action>                 'import' or 'export'
-                             o import - import ConfigMap from a file or files
-                             o export - export ConfigMap to a file or files
-  -c, --configmap <name>   ConfigMap name
+Usage: kube-configmap-exporter <name> -t <dir> options
+
+Options:
+  <name>                   ConfigMap name to export
   -n, --namespace <name>   Namespace ('default' by default)
-  -f, --from <file|dir>    A file or directry to import
-  -t, --to <dir>           Direcotry to export
-  -r, --replace            Replace ConfigMap if already exists
+  -t, --to <dir>           Directory onto which each configmap data is stored
+                           as a file named each configmap key
   -h, --help               Show this message
   -v, --version            Show this command's version
+
+Example:
+  # Export configmap "mycm" in namespace "myns" onto directory "/tmp/"
+  kube-configmap-exporter mycm -n myns -t /tmp
 ```
 
-## HOW TO USE 
+## Prerequisite
+
+- [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) - `kubecmf` uses `kubectl` to access Kubernetes API to import or to export ConfigMap
+- [jq](https://stedolan.github.io/jq/) - `kubecmf` uses `jq` in exporting ConfigMap
+
+## Installation
+
 ```sh
-# Export ConfigMap named <name> into <dir>
-$ kubecmf export -c <name> -t <dir>
-
-# Import files under directory to ConfigMap named <name>
-$ kubecmf import -c <name> -f <dir>
-
-# Import a single <file> to ConfigMap named <name>
-$ kubecmf import -c <name> -f <file>
-
-# Import multiple files <file1> <file2> .. to ConfigMap named <name>
-$ kubecmf import -c <name> -f <file1> -f <file2>
-
-# Import <file> to ConfigMap named <name> ( Delete and Create ConfigMap if ConfigMap <name> exists)
-$ kubecmf import -c <name> -f <file> -r
+sudo git clone https://github.com/yokawasa/kube-configmap-exporter /opt/kube-configmap-exporter
+sudo ln -s /opt/kube-configmap-exporter/kube-configmap-exporter /usr/local/bin/kube-configmap-exporter
 ```
 
-## Sample Scenario
+## Quickstart
 
 You have the following multiple config files under `samples` directry:
 ```sh
@@ -48,12 +43,12 @@ samples
 └── uwsgi.ini
 ```
 
-Now you create ConfigMap named `my-config` and import these files above into it by using `kubecmf`. 
+Now you create ConfigMap named `mycm` and import these files above into it by using `kubectl`. 
 ```sh
-$ kubecmf import -c my-config -f samples
+$ kubectl create configmap mycm --from-file samples
 ```
 
-Let's check how these config files are imported into the ConfigMap `my-config`.
+Then, check how these config files are imported into the ConfigMap `mycm`.
 ```sh
 $ kubectl get cm my-config -o json
 
@@ -67,22 +62,22 @@ $ kubectl get cm my-config -o json
     "kind": "ConfigMap",
     "metadata": {
         "creationTimestamp": "2018-11-15T14:52:00Z",
-        "name": "my-config",
+        "name": "mycm",
         "namespace": "default",
         "resourceVersion": "2843317",
-        "selfLink": "/api/v1/namespaces/default/configmaps/my-config",
+        "selfLink": "/api/v1/namespaces/default/configmaps/mycm",
         "uid": "01a14c9b-e8e6-11e8-b8ca-166cb263b9b6"
     }
 }
 ```
 
-Then, you export ConfigMap `my-config` to a directory named `exports` in your local filesystem.
+Finally, you export ConfigMap `mycm` onto a directory named `exports` in your local filesystem using `kube-configmap-exporter`
 ```sh
 $ mkdir exports
-$ kubecmf export -c my-config -t exports
+$ kube-configmap-exporter mycm -t exports
 ```
 
-Let's check how ConfigMap `my-config` is exported to the directory `exports`.
+Let's check how ConfigMap `mycm` is exported onto the directory `exports`.
 ```sh
 $ tree exports
 exports
@@ -91,24 +86,8 @@ exports
 └── uwsgi.ini
 ```
 
-Finally, you modify these files and want to re-import them into the same ConfigMap named `my-config`. You import them using `kubecmf` command with `-r` option (means `replace`).
-```sh
-$ kubecmf import -c my-config -f samples -r
-```
->[NOTE] In `replace` operation, `my-config` ConfigMap is supposed to be deleted and re-created with the same name.
-
-
-## Prerequisite
-
-- [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) - `kubecmf` uses `kubectl` to access Kubernetes API to import or to export ConfigMap
-- [jq](https://stedolan.github.io/jq/) - `kubecmf` uses `jq` in exporting ConfigMap
-
-## Installation
-
-```sh
-sudo git clone https://github.com/yokawasa/kubecmf /opt/kubecmf
-sudo ln -s /opt/kubecmf/kubecmf /usr/local/bin/kubecmf
-```
-
 ## License
 This project is [Apache Licensed](LICENSE)
+
+## Contributing
+Bug reports, pull requests, and any feedback are welcome on GitHub at https://github.com/yokawasa/kube-configmap-exporter.
