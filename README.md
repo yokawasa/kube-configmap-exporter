@@ -32,12 +32,18 @@ sudo ln -s /opt/kube-configmap-exporter/kube-configmap-exporter /usr/local/bin/k
 ```
 
 ## Quickstart
-
-You have the following multiple config files under `samples` directry:
+Get copy of kube-configmap-exporter
 ```sh
-$ tree samples
+$ git clone https://github.com/yokawasa/kube-configmap-exporter
+cd kube-configmap-exporter
+```
 
-samples
+
+You have the following test files under `tests/files` directry:
+```sh
+$ tree tests/files
+
+tests/files
 ├── database.yml
 ├── nginx.conf
 └── uwsgi.ini
@@ -45,7 +51,7 @@ samples
 
 Now you create ConfigMap named `mycm` and import these files above into it by using `kubectl`. 
 ```sh
-$ kubectl create configmap mycm --from-file samples
+$ kubectl create configmap mycm --from-file tests/files
 ```
 
 Then, check how these config files are imported into the ConfigMap `mycm`.
@@ -71,15 +77,15 @@ $ kubectl get cm my-config -o json
 }
 ```
 
-Finally, you export ConfigMap `mycm` onto a directory named `exports` in your local filesystem using `kube-configmap-exporter`
+Finally, you export ConfigMap `mycm` onto a directory named `tests/exports` using `kube-configmap-exporter`
 ```sh
-$ mkdir exports
-$ kube-configmap-exporter mycm -t exports
+$ mkdir tests/exports
+$ kube-configmap-exporter mycm -t tests/exports
 ```
 
-Let's check how ConfigMap `mycm` is exported onto the directory `exports`.
+Let's check  exported files in `tests/exports` directory.
 ```sh
-$ tree exports
+$ tree tests/exports
 exports
 ├── database.yml
 ├── nginx.conf
