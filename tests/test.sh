@@ -30,4 +30,7 @@ do
   fi
 done
 
+echo "Remove configmap \"mycm\""
+kubectl delete configmap mycm
+
 echo "Success!"
